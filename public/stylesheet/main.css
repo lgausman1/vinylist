@@ -5,6 +5,7 @@
 
 header {
 	background: #cdcdcd;
+	height: 67px;
 
 }
 
@@ -13,10 +14,74 @@ h1 {
 	padding: 11px;
 }
 
-.searchBar {
+.searchBarTop {
 	margin-top: 31px;
+}
+
+.searchBarBottom {
+	margin-top: 5px;
 }
 
 .button {
 	margin-top: 5px;
 }
+
+.loginTop {
+	margin-top: 29px;
+}
+
+.form-control {
+	width: 85%;
+}
+
+.loginLink {
+	position: absolute;
+  	top: 18px;
+  	right: 100px;
+  	background: transparent;
+}
+
+.signUpLink {
+	position: absolute;
+    top: 18px;
+    right: 11px;
+}
+
+/* Link styles */
+a:link {
+	color: black;
+	background: #cdcdcd;
+	text-decoration: none;
+}
+
+a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+a:hover {
+	color: black;
+	background: #cdcdcd;
+	text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,34 +14,131 @@
 	</head>
 	<body>
 		<header>
-			<h1>Vinylist</h1>
+			<h1><a href="/">Vinylist</a></h1>
+			<!-- Large modal -->
+			<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Login</button> -->
+			<a href="#" role="button" class="loginLink" data-toggle="modal" data-target=".bs-example-modal-lg-login">Login</a>
+			<a href = "#" role="button" class="signUpLink" data-toggle="modal" data-target=".bs-example-modal-lg-signup">Sign Up</a>
+
+			<!-- login modal -->
+			<div class="modal fade bs-example-modal-lg-login" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg">
+			    <div class="modal-content">
+			    
+			    	<!-- login form -->
+			     	<form method="POST" action="/login" class="form-horizontal">
+					  <div class="form-group loginTop">
+					    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+					    <div class="col-sm-10">
+					      <input type="email" name="user[email]" class="form-control" id="inputEmail3" placeholder="Email">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+					    <div class="col-sm-10">
+					      <input type="password" name="user[password]" class="form-control" id="inputPassword3" placeholder="Password">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <div class="col-sm-offset-2 col-sm-10">
+					      <div class="checkbox">
+					        <label>
+					          <input type="checkbox"> Remember me
+					        </label>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <div class="col-sm-offset-2 col-sm-10">
+					      <button type="submit" class="btn btn-default">Sign in</button>
+					    </div>
+					  </div>
+					</form>		
+					<!-- Login Form End -->					
+			    </div>
+			  </div>
+			</div>
+			<!-- Login Modal End -->
+
+			<!-- signup modal -->
+			<div class="modal fade bs-example-modal-lg-signup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg">
+			    <div class="modal-content">
+			    
+			    	<!-- signup form -->
+			     	<form method="POST" action="/users" class="form-horizontal">
+					  <div class="form-group loginTop">
+					    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+					    <div class="col-sm-10">
+					      <input type="email" name="user[email]" class="form-control" id="inputEmail3" placeholder="Email">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="inputUsername3" class="col-sm-2 control-label">Username</label>
+					    <div class="col-sm-10">
+					      <input type="text" name="user[username]" class="form-control" id="inputUsername3" placeholder="Username">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+					    <div class="col-sm-10">
+					      <input type="password" name="user[password]" class="form-control" id="inputPassword3" placeholder="Password">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="inputConfirmPassword3" class="col-sm-2 control-label">Confirm Password</label>
+					    <div class="col-sm-10">
+					      <input type="password" name="user[password_confirmation]" class="form-control" id="inputPassword3" placeholder="Confirm Password">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <div class="col-sm-offset-2 col-sm-10">
+					      <button type="submit" class="btn btn-default">Sign up</button>
+					    </div>
+					  </div>
+					</form>		
+					<!-- signup Form End -->					
+			    </div>
+			  </div>
+			</div>
+			<!-- signup Modal End -->
+
+
 		</header>
 		<div class="container">
-			<div class="row searchBar">
-				<div class="col-md-6 col-md-offset-3">
-					<input type="text" class="form-control" placeholder="Album Name">				
+			<form id="newSearch">
+				<div class="row searchBarTop">
+					<div class="col-md-6 col-md-offset-3">
+						<input name="artist" type="text" class="form-control" placeholder="Artist">				
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="button col-md-6 col-md-offset-3">
-					<button type="submit" class="btn btn-default">Submit</button>				
+				<div class="row searchBarBottom">
+					<div class="col-md-6 col-md-offset-3">
+						<input name="album" type="text" class="form-control" placeholder="Album title">				
+					</div>
 				</div>
-			</div>
-			
+				<div class="row">
+					<div class="button col-md-6 col-md-offset-3">
+						<button type="submit" class="btn btn-default">Submit</button>				
+					</div>
+				</div>
+			</form>
 		</div>
 		<div id="albumCon"></div>
 	
 		<!-- Underscore Template -->
 		<script type="text/template" id="albumTemp">
 			<div class="info">
-				<a href="http://www.discogs.com/<%= uri %>">
+				<a href="http://www.discogs.com<%= uri %>" target="_blank">
 				<div class = "row">
 					<img src="<%= thumb %>" alt="album cover image" class="col-sm-2 img-rounded">
 					<div class="col-sm-8 panel panel-default">
   						<div class="panel-heading"><%= title %></div>  						
-  						<div class="panel-body">cat no: </div>  						
+  						<div class="panel-body">cat no: <%= catno %></div>  						
 					</div>		
+					<% if(true) { %>
 					<div class="col-sm-2 glyphicon glyphicon-heart-empty"></div>
+					<% } %>
 				</div>			  					  			
 				</a>
 			</div>
