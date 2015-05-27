@@ -92,13 +92,15 @@ app.post("/users", function (req, res) {
 
 // login user
 app.post("/login", function (req, res) {
-	var user = req.body.user;
+	var user = req.body;
+	console.log(user);
 	db.User.
 	authenticate(user, 
 		function (err, user) {
-			if (!err) {
-				req.login(user);
-				res.redirect("/");
+			if (!err) {								
+				req.login(user);			
+				res.send(user.username);
+				// res.redirect("/");
 			} else {
 				res.send("incorrect login");
 			}

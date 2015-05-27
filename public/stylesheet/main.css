@@ -47,6 +47,12 @@ h1 {
     right: 11px;
 }
 
+#loggedInNav {
+	position: absolute;
+    top: 18px;
+    right: 11px;
+}
+
 /* Link styles */
 a:link {
 	color: black;
