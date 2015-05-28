@@ -113,7 +113,7 @@
 				<div class="row searchBarTop">
 				<div id="col-md-3 likedList">
 					<!-- favorites list -->					
-					<a href="#" id="favList">See List</a>
+					<a href="#" id="favList"></a>
 				</div>				
 					<div class="col-md-6 col-md-offset-3">
 						<input name="artist" type="text" class="form-control" placeholder="Artist">				
@@ -144,7 +144,7 @@
   						<div class="panel-body">cat no: <%= catno %></div>  						
 					</div>
 				</a>	
-																
+					<button data-id=<%= id %> type="button" onclick="deleteThisAlbum(this)" class="<%if (!favoriteList) {%>hidden<%}%> close" aria-label="Close"><span aria-hidden="true">&times;</span></button>											
 					<div data-id=<%= id %> onclick="likeThisAlbum(this)" class="col-sm-2 glyphicon glyphicon-heart-empty <% if (!userIsLoggedIn) {%> hidden<%}%> likeButton"></div>
 					
 				</div>			  					  							

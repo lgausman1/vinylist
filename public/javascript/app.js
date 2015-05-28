@@ -2,7 +2,9 @@
 var userIsLoggedIn = false;
 var allRenderedAlbums = [];
 var currentUser;
+var userId;
 var favorites = [];
+var favoriteList = false;
 
 $(function() {
 
@@ -21,9 +23,13 @@ $(function() {
 		var logCred = { email: $( "#inputEmail3" ).val(), password: $("#inputPassword3").val() };		
 		// POST request
 		$.post("/login", logCred).done(function (user) {
-			currentUser = user;
+			// console.log(user);
+			currentUser = user.username;
+			userId = user.id;
 			// append username to dom header			
-			$("#loggedOutNav").html("<p id='loggedInNav'>Welcome " + user + "</p>" );
+			$("#loggedOutNav").html("<p id='loggedInNav'>Welcome " + currentUser + "</p>" );
+			// append list link
+			$("#favList").html("See List");
 			// append like button to template
 			$(".likeButton").removeClass("hidden");
 			// flip flag
@@ -58,11 +64,13 @@ $(function() {
 	};
 
 	// render favorites list
-	var renderFavorites  = function (list) {			
+	var renderFavorites  = function (list) {					
 		// clear div before appending new results
-		$("#albumCon").html("");
+		$("#albumCon").html("");		
 		// remove heart
-		userIsLoggedIn = false;		
+		userIsLoggedIn = false;	
+		// add delete button
+		favoriteList = true;
 		// template results and append to DOM
 		_(list).each(function (data) {	
 
@@ -71,19 +79,22 @@ $(function() {
 			$albumCon.append($albums);
 
 		});
-	};
+
+		// set delete flag back
+		favoriteList = false;
+	};	
 
 	// Show users favorite list
-	$("#favList").on("click", function (y) {				
+	$("#favList").on("click", function (y) {						
 		// pull id's of their liked albums
-		$.get("/favorites", {username:  currentUser}).done(function (res) {
+		$.get("/favorites", {_id: userId}).done(function (res) {
 			var albumCount = res;
 			// pull liked albums out of album db
+			// reset favorites
+			favorites = [];
 			for (var i = 0; i < albumCount.length; i++) {
 				$.get("/list", {id: res[i]}).done(function (res) {					
-					favorites.push(res);
-					console.log(favorites.length);
-					console.log(albumCount.length);
+					favorites.push(res);					
 					if (favorites.length === albumCount.length) {																
 						renderFavorites(favorites);
 					};
@@ -124,6 +135,23 @@ $(function() {
 
 });
 
+// delete album from favorite list
+var deleteThisAlbum = function (button) {
+	// select clicked items id
+	var discogsId = button.getAttribute("data-id");
+	var albumToDelete;
+	// loop to gather items elements
+	for (var i = 0; i < allRenderedAlbums.length; i++) {		
+		var currentItem = allRenderedAlbums[i];
+		if (currentItem.id == discogsId) {
+			albumToDelete = allRenderedAlbums[i];			
+			break;
+		};
+	};
+	console.log(albumToDelete);
+
+};
+
 // liked album logic
 function likeThisAlbum(button) {
 	// var item = event.target.closest("div.album");	
@@ -146,7 +174,7 @@ function likeThisAlbum(button) {
 				      catno: likedAlbumObj["catno"]} ).done(function (data) {
 
 
-	$.post("/favorite", { username: currentUser, album: data._id });
+	$.post("/favorite", { _id: userId, album: data._id });
 
   	})
 };

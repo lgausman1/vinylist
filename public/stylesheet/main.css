@@ -13,6 +13,9 @@ h1 {
 	margin: 0;
 	padding: 11px;
 }
+.close {
+	margin-right: 130px;
+}
 
 .searchBarTop {
 	margin-top: 31px;

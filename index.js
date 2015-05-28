@@ -83,7 +83,7 @@ app.get("/albums", function (req, res) {
 app.post("/users", function (req, res) {
 	var newUser = req.body.user;
 	db.User.
-	createSecure(newUser, function (err, user) {
+	createSecure(newUser, function (err, user) {		
 		if (user) {
 			req.login(user);
 			res.redirect("/");
@@ -105,7 +105,6 @@ app.post("/album", function (req, res) {
 		catno: favAlbum.catno,
 		id: favAlbum.id
 	}, function (err, album) {
-		console.log(album);
 		res.send(album);
 	})
 })
@@ -113,9 +112,9 @@ app.post("/album", function (req, res) {
 // adds liked album to favorite list
 app.post("/favorite", function (req, res) {
 	var albumAndUsername = req.body;	
-	var username = albumAndUsername.username;
+	var user = albumAndUsername._id;
 	var id = albumAndUsername.album;
-	db.User.update({username: username}, 
+	db.User.update({_id: user}, 
 				   {$push: {albums: id}}, function (err, user) {	
 			console.log(user.albums);	
 	})
@@ -124,8 +123,8 @@ app.post("/favorite", function (req, res) {
 // pull favorite albums
 app.get("/favorites", function (req, res) {
 
-	var user = req.query.username;
-	db.User.findOne({username: user}, function (err, user) {		
+	var user = req.query._id;
+	db.User.findOne({_id: user}, function (err, user) {		
 		var albumIds = user.albums;							
 		res.send(albumIds);
 	});	
@@ -147,9 +146,11 @@ app.post("/login", function (req, res) {
 	db.User.
 	authenticate(user, 
 		function (err, user) {
+			console.log( user );
 			if (!err) {								
-				req.login(user);			
-				res.send(user.username);
+				req.login(user);
+				var userInfo = {id: user._id, username: user.username};			
+				res.send(userInfo);
 				// res.redirect("/");
 			} else {
 				res.send("incorrect login");
