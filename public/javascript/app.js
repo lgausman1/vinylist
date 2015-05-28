@@ -150,9 +150,9 @@ var deleteThisAlbum = function (button) {
 	};
 
 	// DELETE request to delete album
-	$.delete("/delete", ), 
+// 	$.delete("/delete", ), 
 
-};
+// };
 
 // liked album logic
 function likeThisAlbum(button) {
