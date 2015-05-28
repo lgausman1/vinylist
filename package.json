@@ -8,11 +8,22 @@
     "express-session": "^1.11.2",
     "mongoose": "^4.0.3"
   },
-  
   "scripts": {
-	"start": "npm install && bower install && node index.js"
-	}
-
+    "start": "npm install && bower install && node index.js"
+  },
+  "name": "vinylist",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wyattsweet/vinylist.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wyattsweet/vinylist/issues"
+  },
+  "homepage": "https://github.com/wyattsweet/vinylist"
 }
-
-
