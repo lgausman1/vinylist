@@ -1,4 +1,3 @@
-
 var userIsLoggedIn = false;
 var allRenderedAlbums = [];
 var currentUser;
