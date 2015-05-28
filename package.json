@@ -2,9 +2,17 @@
   "dependencies": {
     "bcrypt": "^0.8.3",
     "body-parser": "^1.12.4",
+    "bower": "^1.4.1",
     "disconnect": "^0.6.2",
     "express": "^4.12.4",
     "express-session": "^1.11.2",
     "mongoose": "^4.0.3"
-  }
+  },
+  
+  "scripts": {
+	"start": "npm install && bower install && node index.js"
+	}
+
 }
+
+
