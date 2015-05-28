@@ -1,0 +1,21 @@
+{
+  "name": "vinylist",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wyattsweet/vinylist",
+  "authors": [
+    "wyattsweet <wyattsweet@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "underscore": "~1.8.3"
+  }
+}
