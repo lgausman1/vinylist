@@ -148,7 +148,9 @@ var deleteThisAlbum = function (button) {
 			break;
 		};
 	};
-	console.log(albumToDelete);
+
+	// DELETE request to delete album
+	$.delete("/delete", ), 
 
 };
 
