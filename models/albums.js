@@ -5,11 +5,17 @@ var albumSchema = new mongoose.Schema ({
 	title: {
 		type: String
 	},
-	thumbImg: {
+	thumb: {
 		type: String
 	},
-	discogsId: {
+	uri: {
 		type: String
+	},
+	catno: {
+		type: String
+	},
+	id: {
+		type: String		
 	}	
 });
 

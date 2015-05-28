@@ -62,18 +62,21 @@ var loginHelpers = function (req, res, next) {
 
 app.use(loginHelpers)
 
-app.post("/albums", function (req, res) {
-	// object with artist as key
-	var artObj = req.body;
-	// create array of all keys in the object
-	// in this case there is only one
-	var arr = Object.keys(artObj);
-	// extract the artist name
-	var artist = arr[0];
-	// search Discogs database for the artist
-	dis.database().search( artist, function(err, data){
-    res.send(data);
-	});
+var albums = {};
+app.get("/albums", function (req, res) {
+	var search = req.query.search;
+	if (albums[search]) {
+		console.log("using cached data");
+		res.send(albums[search])
+	} else {
+		console.log("requesting data from Discogs");
+		// search Discogs database for the search
+		dis.database().search( search, function(err, data){
+			// caching data for search
+	    	albums[search] = data;
+	    	res.send(data);    	
+		});
+	}
 })
 
 // Create a new user
@@ -90,10 +93,57 @@ app.post("/users", function (req, res) {
 	});
 });
 
+// create a new album
+app.post("/album", function (req, res) {
+	var favAlbum = req.body;
+	// check if album already exists in db
+	// if not then create new album
+	db.Album.create({
+		title: favAlbum.title,
+		thumb: favAlbum.thumbImg,
+		uri: favAlbum.uri,
+		catno: favAlbum.catno,
+		id: favAlbum.id
+	}, function (err, album) {
+		console.log(album);
+		res.send(album);
+	})
+})
+
+// adds liked album to favorite list
+app.post("/favorite", function (req, res) {
+	var albumAndUsername = req.body;	
+	var username = albumAndUsername.username;
+	var id = albumAndUsername.album;
+	db.User.update({username: username}, 
+				   {$push: {albums: id}}, function (err, user) {	
+			console.log(user.albums);	
+	})
+})
+
+// pull favorite albums
+app.get("/favorites", function (req, res) {
+
+	var user = req.query.username;
+	db.User.findOne({username: user}, function (err, user) {		
+		var albumIds = user.albums;							
+		res.send(albumIds);
+	});	
+});
+
+app.get("/list", function (req, res) {
+
+	var id = req.query.id;
+	console.log(id);
+	db.Album.findOne({_id: id}, function (err, album) {				
+					res.send(album);			
+			});
+	
+});
+
 // login user
 app.post("/login", function (req, res) {
-	var user = req.body;
-	console.log(user);
+	var user = req.body;	
 	db.User.
 	authenticate(user, 
 		function (err, user) {
@@ -113,11 +163,11 @@ app.get("/logout", function (req, res) {
 });
 
 // Getting albums from request on page load
-app.get('/albums', function (req, res) {	
-	dis.database().search("The Byrds", function(err, data){
-    res.send(data);
-	});
-})
+// app.get('/albums', function (req, res) {	
+// 	dis.database().search("The Byrds", function(err, data){
+//     res.send(data);
+// 	});
+// })
 
 app.listen(3000, function() {
 	console.log("Running!");

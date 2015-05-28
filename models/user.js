@@ -23,7 +23,7 @@ var userSchema = new mongoose.Schema({
                     required: true
                   }, 
                   albums: {
-                    type: Array,                     
+                    type: Array                   
                   }                                   
 				
                 });

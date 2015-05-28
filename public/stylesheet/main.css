@@ -53,6 +53,10 @@ h1 {
     right: 11px;
 }
 
+#favList {
+	background: transparent;
+}
+
 /* Link styles */
 a:link {
 	color: black;

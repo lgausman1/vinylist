@@ -107,10 +107,14 @@
 			<!-- signup Modal End -->
 
 
-		</header>
+		</header>		
 		<div class="container">
 			<form id="newSearch">
 				<div class="row searchBarTop">
+				<div id="col-md-3 likedList">
+					<!-- favorites list -->					
+					<a href="#" id="favList">See List</a>
+				</div>				
 					<div class="col-md-6 col-md-offset-3">
 						<input name="artist" type="text" class="form-control" placeholder="Artist">				
 					</div>
@@ -131,17 +135,17 @@
 	
 		<!-- Underscore Template -->
 		<script type="text/template" id="albumTemp">
-			<div class="info">
+			<div class="info">				
+				<div class = "row album">
 				<a href="http://www.discogs.com<%= uri %>" target="_blank">
-				<div class = "row">
 					<img src="<%= thumb %>" alt="album cover image" class="col-sm-2 img-rounded">
 					<div class="col-sm-8 panel panel-default">
-  						<div class="panel-heading"><%= title %></div>  						
+  						<div class="panel-heading albumTitle"><%= title %></div>  						
   						<div class="panel-body">cat no: <%= catno %></div>  						
 					</div>
 				</a>	
 																
-					<div class="col-sm-2 glyphicon glyphicon-heart-empty <% if (!userIsLoggedIn) {%> hidden<%}%> likeButton"></div>
+					<div data-id=<%= id %> onclick="likeThisAlbum(this)" class="col-sm-2 glyphicon glyphicon-heart-empty <% if (!userIsLoggedIn) {%> hidden<%}%> likeButton"></div>
 					
 				</div>			  					  							
 			</div>
