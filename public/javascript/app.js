@@ -58,30 +58,51 @@ $(function() {
 		if (currentUser) {
 			userIsLoggedIn = true;
 		}; 
-		// template results and append to DOM
-		_(list).each(function (data) {	
-			// Filter results to only show titles
-			// with name in it
-			if (data.title.includes( albumTitle )) {				
-				if (data.catno) {
-					// console.log(data.id);
-					//if album is in fav list, switch heart flag, then...	
-					if (discogIdArray.indexOf(data.id) >= 0) {
-						heart = false;
-						allRenderedAlbums.push(data);				
-						var $albums = $(albumTemp(data));				
-						$albumCon.append($albums);
-						heart = true;
-					} else {
-						allRenderedAlbums.push(data);				
-						var $albums = $(albumTemp(data));				
-						$albumCon.append($albums);
+
+		
+
+		// THIS CODE, TRYING TO REPOPULATE USERS FAVORITE LIST SO HEARTS WILL ALWAYS BE FULL
+
+		$.get("/favAlbums", {id: userId}).done(function (res) {
+			albumCount = res;		
+		
+		// get album discog ids
+			for (var i = 0; i < albumCount.length; i++) {				
+				$.get("/discogid", {id: albumCount[i]}).done(function (items) {
+					var x = parseInt(items);
+					discogIdArray.push(x);			
+				});
+			};
+
+
+
+			// template results and append to DOM
+			alert(discogIdArray);
+			_(list).each(function (data) {	
+				// Filter results to only show titles
+				// with name in it
+				if (data.title.includes( albumTitle )) {				
+					if (data.catno) {
+						// console.log(data.id);
+						//if album is in fav list, switch heart flag, then...
+
+						if (discogIdArray.indexOf(data.id) >= 0) {
+							heart = false;
+							allRenderedAlbums.push(data);				
+							var $albums = $(albumTemp(data));				
+							$albumCon.append($albums);
+							heart = true;
+						} else {
+							allRenderedAlbums.push(data);				
+							var $albums = $(albumTemp(data));				
+							$albumCon.append($albums);
+						}
+
 					}
 
-				}
-
-			}			
-		});
+				}			
+			});			
+		});	
 	};
 
 	// show favorites list
@@ -112,13 +133,13 @@ $(function() {
 											
 			favorites = [];
 			
-			alert(albumCount.length);
+			// alert(albumCount.length);
 			
 			for (var i = 0; i < albumCount.length; i++) {
 				$.get("/list", {id: albumCount[i]}).done(function (res) {					
 						favorites.push(res);
-						alert(favorites.length);
-					console.log(favorites.length, albumCount.length);					
+						// alert(favorites.length);
+					// console.log(favorites.length, albumCount.length);					
 					if (favorites.length === albumCount.length) {																
 						renderFavorites(favorites);
 					};

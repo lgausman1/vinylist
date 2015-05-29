@@ -140,7 +140,6 @@ app.get("/list", function (req, res) {
 // collect disco id of favorite albums
 app.get("/discogid", function (req, res) {
 	var id = req.query.id
-	console.log(id);
 	db.Album.findOne({_id: id}, function (err, album) {
 		res.send(album.id);
 	})
