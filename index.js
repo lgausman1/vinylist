@@ -115,8 +115,7 @@ app.post("/favorite", function (req, res) {
 	var user = albumAndUsername._id;
 	var id = albumAndUsername.album;
 	db.User.update({_id: user}, 
-				   {$push: {albums: id}}, function (err, user) {	
-			console.log(user.albums);	
+				   {$push: {albums: id}}, function (err, user) {		
 	})
 })
 
@@ -133,11 +132,20 @@ app.get("/favorites", function (req, res) {
 app.get("/list", function (req, res) {
 
 	var id = req.query.id;
-	console.log(id);
 	db.Album.findOne({_id: id}, function (err, album) {				
 					res.send(album);			
 			});
 	
+});
+
+// delete album from list
+app.delete("/album", function (req, res) {
+	var album = req.body;
+	// console.log(album);
+	db.User.update({_id: album.user}, 
+	   {$pull: {albums: album.id}}, function (err, user) {
+			res.send(user);		   							
+	});
 });
 
 // login user
@@ -146,7 +154,6 @@ app.post("/login", function (req, res) {
 	db.User.
 	authenticate(user, 
 		function (err, user) {
-			console.log( user );
 			if (!err) {								
 				req.login(user);
 				var userInfo = {id: user._id, username: user.username};			
@@ -163,13 +170,6 @@ app.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");
 });
-
-// Getting albums from request on page load
-// app.get('/albums', function (req, res) {	
-// 	dis.database().search("The Byrds", function(err, data){
-//     res.send(data);
-// 	});
-// })
 
 app.listen(process.env.PORT || 3000, function() {
 	console.log("Running!");

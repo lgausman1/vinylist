@@ -145,12 +145,23 @@ var deleteThisAlbum = function (button) {
 		if (currentItem.id == discogsId) {
 			albumToDelete = allRenderedAlbums[i];			
 			break;
-		};
+		};		
 	};
-
+	console.log(albumToDelete);
 	// DELETE request to delete album
-	// $.delete("/delete", ), 
+	$.ajax({
+		url: "/album/",
+		type: 'DELETE',	
+		data: {id: albumToDelete["_id"], user: userId},	
+		success: function (data) {
+			
+			// select item
+			var item = $("div[data-id='" + albumToDelete.id + "']");
+			// hide it
+			item.hide();
 
+		}
+	});
 };
 
 // liked album logic
