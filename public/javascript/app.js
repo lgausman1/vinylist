@@ -77,7 +77,6 @@ $(function() {
 
 
 			// template results and append to DOM
-			alert(discogIdArray);
 			_(list).each(function (data) {	
 				// Filter results to only show titles
 				// with name in it
@@ -132,14 +131,10 @@ $(function() {
 			albumCount = res;
 											
 			favorites = [];
-			
-			// alert(albumCount.length);
-			
+						
 			for (var i = 0; i < albumCount.length; i++) {
 				$.get("/list", {id: albumCount[i]}).done(function (res) {					
-						favorites.push(res);
-						// alert(favorites.length);
-					// console.log(favorites.length, albumCount.length);					
+						favorites.push(res);				
 					if (favorites.length === albumCount.length) {																
 						renderFavorites(favorites);
 					};
