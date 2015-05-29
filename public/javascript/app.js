@@ -3,7 +3,10 @@ var allRenderedAlbums = [];
 var currentUser;
 var userId;
 var favorites = [];
+var albumCount;
 var favoriteList = false;
+var heart = true;
+var discogIdArray = [];
 
 $(function() {
 
@@ -14,7 +17,7 @@ $(function() {
 	var loginForm = $("#newLogin")
 	
 
-	// capture user login info
+	//login
 	loginForm.on("submit", function (e) {
 		// preventing page load
 		e.preventDefault();
@@ -25,6 +28,15 @@ $(function() {
 			// console.log(user);
 			currentUser = user.username;
 			userId = user.id;
+			albumCount = user.albums;
+			// get album discog ids
+			for (var i = 0; i < albumCount.length; i++) {				
+				$.get("/discogid", {id: albumCount[i]}).done(function (items) {
+					var x = parseInt(items);
+					discogIdArray.push(x);
+				});
+			}
+
 			// append username to dom header			
 			$("#loggedOutNav").html("<p id='loggedInNav'>Welcome " + currentUser + "</p>" );
 			// append list link
@@ -51,10 +63,20 @@ $(function() {
 			// Filter results to only show titles
 			// with name in it
 			if (data.title.includes( albumTitle )) {				
-				if (data.catno) {	
-					allRenderedAlbums.push(data);				
-					var $albums = $(albumTemp(data));				
-					$albumCon.append($albums);
+				if (data.catno) {
+					// console.log(data.id);
+					//if album is in fav list, switch heart flag, then...	
+					if (discogIdArray.indexOf(data.id) >= 0) {
+						heart = false;
+						allRenderedAlbums.push(data);				
+						var $albums = $(albumTemp(data));				
+						$albumCon.append($albums);
+						heart = true;
+					} else {
+						allRenderedAlbums.push(data);				
+						var $albums = $(albumTemp(data));				
+						$albumCon.append($albums);
+					}
 
 				}
 
@@ -62,8 +84,8 @@ $(function() {
 		});
 	};
 
-	// render favorites list
-	var renderFavorites  = function (list) {					
+	// show favorites list
+	var renderFavorites  = function (list) {						
 		// clear div before appending new results
 		$("#albumCon").html("");		
 		// remove heart
@@ -83,24 +105,27 @@ $(function() {
 		favoriteList = false;
 	};	
 
-	// Show users favorite list
-	$("#favList").on("click", function (y) {						
-		// pull id's of their liked albums
-		$.get("/favorites", {_id: userId}).done(function (res) {
-			var albumCount = res;
-			// pull liked albums out of album db
-			// reset favorites
+	// collect users favorite list
+	$("#favList").on("click", function (y) {		
+		$.get("/favAlbums", {id: userId}).done(function (res) {
+			albumCount = res;
+											
 			favorites = [];
+			
+			alert(albumCount.length);
+			
 			for (var i = 0; i < albumCount.length; i++) {
-				$.get("/list", {id: res[i]}).done(function (res) {					
-					favorites.push(res);					
+				$.get("/list", {id: albumCount[i]}).done(function (res) {					
+						favorites.push(res);
+						alert(favorites.length);
+					console.log(favorites.length, albumCount.length);					
 					if (favorites.length === albumCount.length) {																
 						renderFavorites(favorites);
 					};
 				})
 				
 			}						
-		})			
+		})	
 	})
 
 	// wait for new search
@@ -118,7 +143,6 @@ $(function() {
 			// reset the form			
 			$newSearch[0].reset();			
 			var list = data.results;
-			console.log(list);
 			//render to dom
 			render(list);
 		});
@@ -146,8 +170,7 @@ var deleteThisAlbum = function (button) {
 			albumToDelete = allRenderedAlbums[i];			
 			break;
 		};		
-	};
-	console.log(albumToDelete);
+	};	
 	// DELETE request to delete album
 	$.ajax({
 		url: "/album/",
@@ -164,7 +187,7 @@ var deleteThisAlbum = function (button) {
 	});
 };
 
-// liked album logic
+// liked album click
 function likeThisAlbum(button) {
 	// var item = event.target.closest("div.album");	
 	// selects the clicked items id
@@ -177,7 +200,7 @@ function likeThisAlbum(button) {
 			likedAlbumObj = allRenderedAlbums[i];			
 			break;
 		};
-	};	
+	};		
 
 	$.post("/album", {id: likedAlbumObj["id"],
 					  thumbImg: likedAlbumObj["thumb"],
@@ -186,7 +209,15 @@ function likeThisAlbum(button) {
 				      catno: likedAlbumObj["catno"]} ).done(function (data) {
 
 
-	$.post("/favorite", { _id: userId, album: data._id });
+						$.post("/favorite", { _id: userId, album: data._id })
+
+						// fill heart on page after click
+						var item = $("div[data-id='" + likedAlbumObj["id"] + "']")
+						var d = item[1];						
+						d.setAttribute("class", "col-sm-2 glyphicon glyphicon-heart likeButton");
+						
+
+
 
   	})
 };

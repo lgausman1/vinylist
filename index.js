@@ -62,21 +62,21 @@ var loginHelpers = function (req, res, next) {
 
 app.use(loginHelpers)
 
-var albums = {};
+// var albums = {};
 app.get("/albums", function (req, res) {
 	var search = req.query.search;
-	if (albums[search]) {
-		console.log("using cached data");
-		res.send(albums[search])
-	} else {
-		console.log("requesting data from Discogs");
+	// if (albums[search]) {
+	// 	console.log("using cached data");
+	// 	res.send(albums[search])
+	// } else {
+	// 	console.log("requesting data from Discogs");
 		// search Discogs database for the search
 		dis.database().search( search, function(err, data){
 			// caching data for search
-	    	albums[search] = data;
+	    	// albums[search] = data;
 	    	res.send(data);    	
 		});
-	}
+	// }
 })
 
 // Create a new user
@@ -93,6 +93,14 @@ app.post("/users", function (req, res) {
 	});
 });
 
+app.get("/favAlbums", function (req, res) {
+	var userId = req.query.id;
+	db.User.findOne({_id: userId}, function (err, user) {
+		// console.log(user);
+		res.send(user.albums);
+	});
+})
+
 // create a new album
 app.post("/album", function (req, res) {
 	var favAlbum = req.body;
@@ -107,7 +115,7 @@ app.post("/album", function (req, res) {
 	}, function (err, album) {
 		res.send(album);
 	})
-})
+}) 
 
 // adds liked album to favorite list
 app.post("/favorite", function (req, res) {
@@ -116,18 +124,9 @@ app.post("/favorite", function (req, res) {
 	var id = albumAndUsername.album;
 	db.User.update({_id: user}, 
 				   {$push: {albums: id}}, function (err, user) {		
+					
 	})
 })
-
-// pull favorite albums
-app.get("/favorites", function (req, res) {
-
-	var user = req.query._id;
-	db.User.findOne({_id: user}, function (err, user) {		
-		var albumIds = user.albums;							
-		res.send(albumIds);
-	});	
-});
 
 app.get("/list", function (req, res) {
 
@@ -137,6 +136,15 @@ app.get("/list", function (req, res) {
 			});
 	
 });
+
+// collect disco id of favorite albums
+app.get("/discogid", function (req, res) {
+	var id = req.query.id
+	console.log(id);
+	db.Album.findOne({_id: id}, function (err, album) {
+		res.send(album.id);
+	})
+})
 
 // delete album from list
 app.delete("/album", function (req, res) {
@@ -156,9 +164,9 @@ app.post("/login", function (req, res) {
 		function (err, user) {
 			if (!err) {								
 				req.login(user);
-				var userInfo = {id: user._id, username: user.username};			
+				var userInfo = {id: user._id, username: user.username, albums: user.albums};			
 				res.send(userInfo);
-				// res.redirect("/");
+
 			} else {
 				res.send("incorrect login");
 			}

@@ -145,7 +145,7 @@
 					</div>
 				</a>	
 					<button data-id=<%= id %> type="button" onclick="deleteThisAlbum(this)" class="<%if (!favoriteList) {%>hidden<%}%> close" aria-label="Close"><span aria-hidden="true">&times;</span></button>											
-					<div data-id=<%= id %> onclick="likeThisAlbum(this)" class="col-sm-2 glyphicon glyphicon-heart-empty <% if (!userIsLoggedIn) {%> hidden<%}%> likeButton"></div>
+					<div data-id=<%= id %> onclick="likeThisAlbum(this)" class="col-sm-2 glyphicon glyphicon-heart<%if (heart) {%>-empty<%}%> <% if (!userIsLoggedIn) {%> hidden<%}%> likeButton"></div>
 					
 				</div>			  					  							
 			</div>
