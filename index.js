@@ -15,6 +15,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
+
 // serve js & css files into a public folder
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/bower_components'));
