@@ -5,6 +5,11 @@
 
 Vinylist allows users to save albums that they want to purchase to a list. Users can search for any albums that have been released, save them to a list and delete them from their list. 
 
+View deployed app - https://protected-citadel-9748.herokuapp.com/
+
+Project task tracking - https://trello.com/b/vznWiiGb/wdi-project-one
+
+
 ### Existing Features
 
 * Pages renders albums from Discogs API
@@ -15,6 +20,7 @@ Vinylist allows users to save albums that they want to purchase to a list. Users
 
 ### Planned Features
 
+* Text description on site that appears upon 
 * Responsive design
 * Once album is liked, user should not be able to add album again
 * Once album is liked, check to make sure it doesn't already exist in DB
